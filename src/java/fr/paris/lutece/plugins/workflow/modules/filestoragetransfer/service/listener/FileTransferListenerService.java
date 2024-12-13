@@ -13,7 +13,7 @@ import fr.paris.lutece.plugins.genericattributes.business.ResponseHome;
 public class FileTransferListenerService implements IFileTransferListener
 {
 
-    private static String contextValue = AppPropertiesService.getProperty( "genericattributes.filetransfercontext" );
+    private static String contextValue = AppPropertiesService.getProperty( "workflow-filestoragetransfer.filetransfercontext" );
     @Override
     public void changeFileService( FileTransferRequest fileTransferRequest )
     {
