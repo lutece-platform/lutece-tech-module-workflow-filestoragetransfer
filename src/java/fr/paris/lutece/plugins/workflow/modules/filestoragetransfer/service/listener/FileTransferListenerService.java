@@ -31,13 +31,9 @@ public class FileTransferListenerService implements IFileTransferListener
 
             Response response = responseList.stream().filter( r -> r.getFile().getFileKey().equals( fileTransferRequest.getOldFileKey() ) ).findFirst().orElse( null );
 
-            
             if ( response != null )
             {
-                response.getFile().setFileKey( fileTransferRequest.getNewFileKey() );
-                response.getFile().setOrigin( fileTransferRequest.getTargetFileserviceproviderName() );
-
-                ResponseHome.update( response );
+                ResponseHome.updateFileKey( response.getIdResponse(), fileTransferRequest.getNewFileKey(), fileTransferRequest.getTargetFileserviceproviderName() );
             }
         }
     }
