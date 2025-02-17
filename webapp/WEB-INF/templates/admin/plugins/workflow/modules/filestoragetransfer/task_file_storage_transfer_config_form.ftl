@@ -12,6 +12,3 @@
             </#list>
     </@select>
 </@formGroup>
-<@formGroup labelFor='request_context' labelKey='#i18n{module.workflow.filestoragetransfer.manage_taskfiletransferconfigs.columnContext}' mandatory=true>
-    <@input type='text' id='context' name='context' maxlength=255 value='${config.context!\'\'}' tabIndex='2' />
-</@formGroup>
