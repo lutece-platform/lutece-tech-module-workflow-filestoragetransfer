@@ -29,6 +29,7 @@ import fr.paris.lutece.portal.service.rbac.ResourceTypeManager;
 import fr.paris.lutece.portal.service.rbac.ResourceTypeProvider;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
+import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.util.html.HtmlTemplate;
 
 public class TaskFileTransferTaskComponent extends AbstractTaskComponent {
@@ -86,33 +87,15 @@ public class TaskFileTransferTaskComponent extends AbstractTaskComponent {
         // Modify this code to filter on different ResourceType linked to GenericAttributes
         // Modify this code to provide a list of resources (forms, appointments) to select the appropriate entry
 
-            TaskFileTransferConfig config = _taskConfigService.findByPrimaryKey( task.getId( ) ) == null ? new TaskFileTransferConfig( ) : _taskConfigService.findByPrimaryKey( task.getId( ) );
-
-            /*Collection<ResourceType> listResourceType = ResourceTypeManager.getResourceTypeList().stream().filter( rt -> !rt.getPluginName().equals(null) ).collect( Collectors.toList() );
-
-            List<EntryType> listResourceCode = EntryTypeHome.getCompleteList();
-            if( config.getResourceType() != null )
-            {
-                listResourceCode.stream().filter( et -> et.getPlugin().equals(ResourceTypeManager.getResourceType(config.getResourceType()).getPluginName()) ).collect( Collectors.toList() );
-            }
-            EntryFilter filter = new EntryFilter( );
-            if( config.getResourceCode() != null )
-            {
-                filter.setResourceType( config.getResourceType() );
-                filter.setIdEntryType( FILTER_ENTRY_TYPE );
-            }
-
-            List<Entry> listEntryCode = EntryHome.getEntryList(filter);*/
+            TaskFileTransferConfig config = _taskConfigService.findByPrimaryKey( task.getId( ) ) == null 
+            ? new TaskFileTransferConfig( ) 
+            : _taskConfigService.findByPrimaryKey( task.getId( ) );
 
             List<String> listFileServices = SpringContextService.getBeansOfType( IFileStoreServiceProvider.class )
             .stream( ).map( IFileStoreServiceProvider::getName ).collect( Collectors.toList( ) );
             
             Map<String, Object> model = new HashMap<>( );
             model.put ( MARK_FILESERVICES_LIST, listFileServices );
-
-            // model.put( MARK_LIST_RESOURCE_TYPE, listResourceType );
-            // model.put( MARK_LIST_RESOURCE_CODE, listEntryCode );
-            // model.put( MARK_LIST_ENTRIES, listEntryCode );
             model.put( MARK_CONFIG, config );
 
             final HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_TASK_FILE_STORAGE_TRANSFER_CONFIG, locale, model );
@@ -130,20 +113,11 @@ public class TaskFileTransferTaskComponent extends AbstractTaskComponent {
             _config = new TaskFileTransferConfig( );
             _config.setIdTask( task.getId( ) );
             _config.setTargetFileserviceproviderName( request.getParameter( "targetFileserviceproviderName" ) );
-            _config.setContext( request.getParameter( "context" ) );
+            _config.setContext( AppPropertiesService.getProperty( "workflow-filestoragetransfer.filetransfercontext" ) );
             _config.setEntryCode( request.getParameter( "entryCode" ) );
             _config.setResourceCode( "" );
             _config.setResourceType( FILTER_RESOURCE_TYPE );
-        }
 
-        /*String action = request.getParameter( PARAMETER_ACTION );
-        if ( action != null )
-        {
-            doProcessAction( action, request );
-        }*/
-
-        if ( create )
-        {
             _taskConfigService.create( _config );
         }
         else
@@ -154,27 +128,11 @@ public class TaskFileTransferTaskComponent extends AbstractTaskComponent {
 
     }
 
-    /*private void doProcessAction( String action, HttpServletRequest request )
-    {
-        switch( action )
-        {
-            case ACTION_SELECT_RESOURCE_TYPE:
-                _config.setResourceType( request.getParameter( PARAMETER_RESOURCE_TYPE ) );            
-                break;
-            case ACTION_SELECT_RESOURCE_CODE:
-                _config.setResourceCode( request.getParameter( PARAMETER_RESOURCE_CODE ) );
-                break;
-            case ACTION_SELECT_ENTRY_CODE:
-                _config.setEntryCode( request.getParameter( PARAMETER_ENTRY_CODE ) );
-                break;
-            default:
-                break;
-        }
-    }*/
-
     @Override
     public String getDisplayTaskInformation(int nIdHistory, HttpServletRequest request, Locale locale, ITask task) {
-        TaskFileTransferConfig config = _taskConfigService.findByPrimaryKey( task.getId( ) ) == null ? new TaskFileTransferConfig( ) : _taskConfigService.findByPrimaryKey( task.getId( ) );
+        TaskFileTransferConfig config = _taskConfigService.findByPrimaryKey( task.getId( ) ) == null 
+        ? new TaskFileTransferConfig( ) 
+        : _taskConfigService.findByPrimaryKey( task.getId( ) );
 
         Map<String, Object> model = new HashMap<>( );
         model.put( MARK_CONFIG, config );
