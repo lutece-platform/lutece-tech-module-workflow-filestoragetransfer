@@ -7,14 +7,14 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
 
-import fr.paris.lutece.plugins.filestoragetransfer.business.FileTransferRequestHome;
+import fr.paris.lutece.plugins.filestoragetransfer.business.FileStorageTransferRequestHome;
 import fr.paris.lutece.plugins.forms.business.FormQuestionResponse;
 import fr.paris.lutece.plugins.forms.business.FormQuestionResponseHome;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.service.file.GenericAttributeFileService;
 import fr.paris.lutece.plugins.workflow.modules.filestoragetransfer.business.TaskFileTransferConfig;
 import fr.paris.lutece.api.user.User;
-import fr.paris.lutece.plugins.filestoragetransfer.business.FileTransferRequest;
+import fr.paris.lutece.plugins.filestoragetransfer.business.FileStorageTransferRequest;
 import fr.paris.lutece.plugins.workflowcore.service.config.ITaskConfigService;
 import fr.paris.lutece.plugins.workflowcore.service.task.SimpleTask;
 
@@ -63,10 +63,10 @@ public class TaskFileTransfer extends SimpleTask {
             Response response = listResponse.get(0);
             String currentFileStoreServiceProvider = GenericAttributeFileService.getInstance().getFileStoreProviderName( response.getFile().getOrigin() );
 
-            FileTransferRequest fileRequestTransfer = new FileTransferRequest( response.getFile().getFileKey(), currentFileStoreServiceProvider, 
+            FileStorageTransferRequest fileRequestTransfer = new FileStorageTransferRequest( response.getFile().getFileKey(), currentFileStoreServiceProvider, 
                 config.getTargetFileserviceproviderName(), config.getContext(), "" );
 
-            FileTransferRequestHome.create( fileRequestTransfer );
+            FileStorageTransferRequestHome.create( fileRequestTransfer );
 
             return true;
         }

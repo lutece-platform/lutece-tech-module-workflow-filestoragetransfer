@@ -3,25 +3,25 @@ package fr.paris.lutece.plugins.workflow.modules.filestoragetransfer.service.lis
 import java.util.List;
 
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
-import fr.paris.lutece.plugins.filestoragetransfer.business.FileTransferRequest;
-import fr.paris.lutece.plugins.filestoragetransfer.service.listener.IFileTransferListener;
+import fr.paris.lutece.plugins.filestoragetransfer.business.FileStorageTransferRequest;
+import fr.paris.lutece.plugins.filestoragetransfer.service.listener.IFileStorageTransferListener;
 
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.business.ResponseFilter;
 import fr.paris.lutece.plugins.genericattributes.business.ResponseHome;
 
-public class FileTransferListenerService implements IFileTransferListener
+public class FileStorageTransferListenerService implements IFileStorageTransferListener
 {
-
     private static String contextValue = AppPropertiesService.getProperty( "workflow-filestoragetransfer.filetransfercontext" );
+
     @Override
-    public void changeFileService( FileTransferRequest fileTransferRequest )
+    public void changeFileService( FileStorageTransferRequest fileTransferRequest )
     {
         if ( fileTransferRequest == null )
         {
             return;
         }
-        else if( !fileTransferRequest.getRequestContext().equals(contextValue) )
+        else if( !verifyFileStorageTransferContext( fileTransferRequest.getRequestContext( ) ) )
         {
             return;
         }
@@ -29,13 +29,18 @@ public class FileTransferListenerService implements IFileTransferListener
             ResponseFilter responseFilter = new ResponseFilter();
             List<Response> responseList = ResponseHome.getResponseList( responseFilter );
 
-            Response response = responseList.stream().filter( r -> r.getFile().getFileKey().equals( fileTransferRequest.getOldFileKey() ) ).findFirst().orElse( null );
+            Response response = responseList.stream().filter( r -> r.getFile().getFileKey().equals( fileTransferRequest.getSourceFileKey() ) ).findFirst().orElse( null );
 
             if ( response != null )
             {
-                ResponseHome.updateFileKey( response.getIdResponse(), fileTransferRequest.getNewFileKey(), fileTransferRequest.getTargetFileserviceproviderName() );
+                ResponseHome.updateFileKey( response.getIdResponse(), fileTransferRequest.getTargetFileKey(), fileTransferRequest.getTargetFileserviceproviderName() );
             }
         }
+    }
+
+    @Override
+    public boolean verifyFileStorageTransferContext( String fileTransferRequestContext ) {
+        return fileTransferRequestContext.equals( contextValue ) ? true : false;
     }
 
     @Override
