@@ -41,5 +41,5 @@
         class="fr.paris.lutece.plugins.workflow.modules.filestoragetransfer.service.TaskFileTransferService"
 		p:taskConfigDAO-ref="workflow-filestoragetransfer.taskFileTransferConfigDAO" />
 
-    <bean id="workflow-filestoragetransfer.fileTransferListenerService" class="fr.paris.lutece.plugins.workflow.modules.filestoragetransfer.service.listener.FileTransferListenerService" />
+    <bean id="workflow-filestoragetransfer.fileStorageTransferListenerService" class="fr.paris.lutece.plugins.workflow.modules.filestoragetransfer.service.listener.FileStorageTransferListenerService" />
 </beans>
