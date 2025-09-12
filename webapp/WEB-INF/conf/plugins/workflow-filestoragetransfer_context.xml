@@ -21,7 +21,7 @@
         p:beanName="workflow-filestoragetransfer.taskFileTransfer"
         p:configBeanName="workflow-filestoragetransfer.taskFileTransferConfig"
         p:configRequired="true"
-        p:formTaskRequired="true"
+        p:formTaskRequired="false"
         p:taskForAutomaticAction="true" />
 
     <bean id="workflow-filestoragetransfer.taskFileTransfer" 

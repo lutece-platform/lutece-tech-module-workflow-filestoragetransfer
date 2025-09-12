@@ -27,13 +27,17 @@ public class FileStorageTransferListenerService implements IFileStorageTransferL
         }
         else {
             ResponseFilter responseFilter = new ResponseFilter();
-            List<Response> responseList = ResponseHome.getResponseList( responseFilter );
+            responseFilter.setFileKey(fileTransferRequest.getSourceFileKey());
 
-            Response response = responseList.stream().filter( r -> r.getFile().getFileKey().equals( fileTransferRequest.getSourceFileKey() ) ).findFirst().orElse( null );
-
-            if ( response != null )
+            List<Response> listResponse = ResponseHome.getResponseList( responseFilter );
+            Response response = null;
+            if ( listResponse != null && !listResponse.isEmpty( ) )
             {
+                response = listResponse.get( 0 );
                 ResponseHome.updateFileKey( response.getIdResponse(), fileTransferRequest.getTargetFileKey(), fileTransferRequest.getTargetFileserviceproviderName() );
+            }
+            else {
+                throw new IllegalStateException( "No response found for file key " + fileTransferRequest.getSourceFileKey() );
             }
         }
     }
