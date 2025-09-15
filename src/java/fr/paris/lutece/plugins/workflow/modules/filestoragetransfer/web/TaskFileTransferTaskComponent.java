@@ -122,6 +122,8 @@ public class TaskFileTransferTaskComponent extends AbstractTaskComponent {
         }
         else
         {
+            _config.setEntryCode( request.getParameter( "entryCode" ) );
+            _config.setTargetFileserviceproviderName( request.getParameter( "targetFileserviceproviderName" ) );
             _taskConfigService.update( _config );
         }
         return null;
