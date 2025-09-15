@@ -56,18 +56,24 @@ public class TaskFileTransfer extends SimpleTask {
         .stream().filter(fqr -> fqr.getQuestion().getCode().equals(config.getEntryCode()))
         .forEach(fqr -> listResponse.addAll(fqr.getEntryResponse()));
         
-        if(listResponse.size() != 1 ) {
+        if(listResponse.size() == 0) {
             return false;
         }
         else {  
-            Response response = listResponse.get(0);
-            String currentFileStoreServiceProvider = GenericAttributeFileService.getInstance().getFileStoreProviderName( response.getFile().getOrigin() );
+            for ( Response response : listResponse ) {
+                if ( response.getFile().getFileKey().equals(null) ) {
+                    continue;
+                }
+                else {
+                    String currentFileStoreServiceProvider = GenericAttributeFileService.getInstance().getFileStoreProviderName( response.getFile().getOrigin() );
 
-            FileStorageTransferRequest fileRequestTransfer = new FileStorageTransferRequest( response.getFile().getFileKey(), currentFileStoreServiceProvider, 
-                config.getTargetFileserviceproviderName(), config.getContext(), "" );
+                    FileStorageTransferRequest fileRequestTransfer = new FileStorageTransferRequest( response.getFile().getFileKey(), currentFileStoreServiceProvider, 
+                    config.getTargetFileserviceproviderName(), config.getContext(), "" );
 
-            FileStorageTransferRequestHome.create( fileRequestTransfer );
+                    FileStorageTransferRequestHome.create( fileRequestTransfer );
+                }
 
+            }
             return true;
         }
     }
